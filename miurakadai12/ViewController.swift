@@ -14,30 +14,32 @@ class ViewController: UIViewController {
     @IBOutlet private weak var taxTextField: UITextField!
     @IBOutlet private weak var includedTextField: UITextField!
 
+    private let taxKey = "taxKey"
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        includedTextField.text = String(0)
+        includedTextField.text = "0"
         
         // UserDefaultsから消費税率を取得
-        let savedTax = UserDefaults.standard.integer(forKey: "taxKey")
+        let savedTax = UserDefaults.standard.integer(forKey: taxKey)
         taxTextField.text = String(savedTax)
     }
 
     @IBAction func calculationButton(_ sender: Any) {
-        // テキストフィールドがInt型以外なら計算結果は空文字を返す
-        guard let taxexcText = excludedTextField.text,
+        // テキストフィールドがInt型以外なら計算結果として空文字を表示する
+        guard let taxExcludedText = excludedTextField.text,
               let taxText = taxTextField.text,
-              let taxexc = Int(taxexcText),
+              let taxExcluded = Int(taxExcludedText),
               let tax = Int(taxText) else {
                   includedTextField.text = ""
             return
         }
         
         // 税込金額を計算して表示
-        let taxinc = taxexc * (tax + 100) / 100
-        includedTextField.text = "\(taxinc)"
+        let taxIncluded = taxExcluded * (tax + 100) / 100
+        includedTextField.text = "\(taxIncluded)"
         
         // 消費税率を保存
-        UserDefaults.standard.set(tax, forKey: "taxKey")
+        UserDefaults.standard.set(tax, forKey: taxKey)
     }
 }
